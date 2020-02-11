@@ -1,7 +1,6 @@
 -- creating Person table
-
-CREATE TABLE IF NOT EXIST Person(
-  SIN INT,
+CREATE TABLE IF NOT EXISTS Person(
+  SIN INT NOT NULL UNIQUE,
   Firstname VARCHAR(100) NOT NULL,
   Lastname VARCHAR(100) NOT NULL,
   Gender ENUM("Male", "Female") NOT NULL,
@@ -15,23 +14,81 @@ CREATE TABLE IF NOT EXIST Person(
 );
 
 -- creating phone numer table
-
-CREATE TABLE IF NOT EXIST PhoneNumber(
-  SIN INT,
-  Number VARCHAR(100),
-  Type VARCHAR(100) NOT NULL,
+CREATE TABLE IF NOT EXISTS PhoneNumber(
+  SIN INT NOT NULL UNIQUE,
+  Phone_Number VARCHAR(100) NOT NULL,
+  Phone_Type VARCHAR(100) NOT NULL,
   CONSTRAINT PHONENUMBER_FK FOREIGN KEY (SIN) REFERENCES Person(SIN),
-  PRIMARY KEY(SIN, Number)
+  PRIMARY KEY(SIN, Phone_Number)
 );
 
 -- creating pilot
-
-CREATE TABLE IF NOT EXIST Pilot(
-  SIN INT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS Pilot(
+  SIN INT NOT NULL UNIQUE,
   Salary FLOAT NOT NULL,
   YearsOfService FLOAT NOT NULL,
   CONSTRAINT PILOT_FK FOREIGN KEY (SIN) REFERENCES Person(SIN),
+  PRIMARY KEY(SIN)
 );
+
+-- creating passenger
+CREATE TABLE IF NOT EXISTS Passenger(
+  SIN INT NOT NULL UNIQUE,
+  Age INT,
+  Institution_Id INT,
+  Passenger_type ENUM("Child", "Senior","Student", "Others") NOT NULL,
+  CONSTRAINT SIN_FK FOREIGN KEY (SIN) REFERENCES Person(SIN),
+  CONSTRAINT Passenger_type_FK FOREIGN KEY (Passenger_type) REFERENCES Fare(Fare_type),
+  CONSTRAINT Institution_Id_FK FOREIGN KEY (Institution_Id) REFERENCES Institution(Institution_Id),
+  PRIMARY KEY(SIN,Passenger_type)
+);
+
+-- creating fare
+CREATE TABLE IF NOT EXISTS Fare(
+  Fare_type ENUM("Child", "Senior","Student", "Others") NOT NULL,
+  Fare_price FLOAT NOT NULL UNIQUE,
+  PRIMARY KEY(Fare_type, Fare_price)
+);
+
+-- creating Institution
+CREATE TABLE IF NOT EXISTS Institution(
+  Institution_Id INT NOT NULL UNIQUE,
+  Institution_Name VARCHAR(100) NOT NULL,
+  PRIMARY KEY(Institution_Id)
+);
+
+-- creating passenger
+CREATE TABLE IF NOT EXISTS ServicePersonnel(
+  SIN INT NOT NULL UNIQUE,
+  Specialization varchar(100) NOT NULL,
+  Level ENUM("technician", "senior technician", "supervisor", "manager") NOT NULL,
+  YearsOfService FLOAT NOT NULL,
+  Salary FLOAT NOT NULL,
+  CONSTRAINT SIN_FK FOREIGN KEY (SIN) REFERENCES Person(SIN),
+  PRIMARY KEY(SIN)
+);
+
+
+
+======================== update before=============================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 -- creating driving infractions
 
@@ -45,16 +102,6 @@ CREATE TABLE IF NOT EXIST DrivingInfractions(
   PRIMARY KEY(SIN, Date)
 );
 
--- creating Service Personnel;
-
-CREATE TABLE IF NOT EXIST ServicePersonnel(
-  SIN INT PRIMARY KEY,
-  Specialization VARCHAR(100) NOT NULL,
-  Level VARCHAR(100) NOT NULL,
-  YearsOfService FLOAT NOT NULL,
-  Salary FLOAT NOT NULL,
-  CONSTRAINT PERSONNEL_FK FOREIGN KEY (SIN) REFERENCES Person(SIN),
-);
 
 -- creating Ship;
 
