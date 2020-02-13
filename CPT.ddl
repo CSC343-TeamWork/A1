@@ -194,11 +194,11 @@ CREATE TABLE IF NOT EXISTS Fare(
 
 -- creating associated with
 CREATE TABLE IF NOT EXISTS AssociatedWith(
-  PassengerType ENUM("Child", "Senior","Student") NOT NULL,
+  SIN INT NOT NULL,
   type ENUM("Child", "Senior","Student") NOT NULL,
-  CONSTRAINT PassengerC_type_FK FOREIGN KEY (PassengerType) REFERENCES Passenger(PassengerType),
+  CONSTRAINT SINE_FK FOREIGN KEY (SIN) REFERENCES Person(SIN),
   CONSTRAINT PassengerB_type_FK1 FOREIGN KEY (type) REFERENCES Fare(type),
-  PRIMARY KEY(PassengerType,type)
+  PRIMARY KEY(SIN)
 
 );
 
